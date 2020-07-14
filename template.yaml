@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  OpenCV 4.2.0 as AWS Lambda Layer
+  A simpler way to use OpenCV 4.2 as AWS lambda layer
+
+Globals:
+  Function:
+    Timeout: 60
+    MemorySize: 128
+
+Resources:
+  OpenCvPythonLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: c2_lambda_layer
+      CompatibleRuntimes:
+        - python3.6
+    Metadata:
+      BuildMethod: python3.6
+
+  OpenCvTest:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: opencv_test_function
+      Handler: opencv_test/app.lambda_handler
+      Runtime: python3.6
+      Layers:
+        - !Ref OpenCvPythonLayer
